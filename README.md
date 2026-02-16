@@ -1,5 +1,8 @@
 # tuwunel
-This is a helm chart for [tuwunel][homepage] forked from [conduwuit][conduwuit] helm chart
+This is a helm chart for [tuwunel][homepage] forked from [conduwuit][conduwuit] helm chart...DISCONTINUED!
+
+@magikid did fork my repo and made it way better so use his instead:
+https://github.com/magikid/modern-conduwuit-helm
 
 ## TL;DR;
 ```console
