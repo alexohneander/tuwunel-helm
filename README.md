@@ -1,14 +1,16 @@
 # tuwunel
+
 This is a helm chart for [tuwunel][homepage] forked from [conduwuit][conduwuit] helm chart.
 
-
 ## TL;DR;
+
 ```console
 helm repo add tuwunel https://github.com/alexohneander/tuwunel-helm
 helm install --set server_name=matrix.example.org tuwunel/tuwunel
 ```
 
 ## Installing the Chart
+
 To install the chart with the release name `my-release`:
 
 ```console
@@ -16,6 +18,7 @@ helm install --name my-release tuwunel/tuwunel
 ```
 
 ## Uninstalling the Chart
+
 To uninstall/delete the `my-release` deployment:
 
 ```console
@@ -25,6 +28,7 @@ helm delete my-release
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
+
 The following tables lists the configurable parameters of the tuwunel chart and their default values.
 
 | Parameter                          | Description                                                                                | Default                 |
@@ -76,8 +80,8 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install --name my-release \
-	--set ingress.enabled=true \
-	alexohneander/tuwunel
+ --set ingress.enabled=true \
+ alexohneander/tuwunel
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
@@ -94,23 +98,23 @@ If you already run a shared Gateway in your cluster, enable the HTTPRoute only:
 
 ```yaml
 gateway:
-	enabled: true
-	name: shared-gateway
-	namespace: infra
-	sectionName: http
-	hostnames:
-		- matrix.example.org
+ enabled: true
+ name: shared-gateway
+ namespace: infra
+ sectionName: http
+ hostnames:
+  - matrix.example.org
 ```
 
 If this chart should also create the Gateway resource, enable `gateway.create` and set the GatewayClass:
 
 ```yaml
 gateway:
-	enabled: true
-	create: true
-	className: cilium
-	hostnames:
-		- matrix.example.org
+ enabled: true
+ create: true
+ className: cilium
+ hostnames:
+  - matrix.example.org
 ```
 
 [docker]: https://ghcr.io/matrix-construct/tuwunel:latest
