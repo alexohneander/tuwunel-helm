@@ -59,14 +59,9 @@ spec:
           env:
             - name: TOKIO_WORKER_THREADS
               value: {{ $threads | quote }}
+            {{- if not .Values.tomlConfig.enabled }}
             - name: CONDUWUIT_SERVER_NAME
               value: {{ .Values.config.server_name | quote }}
-            - name: CONDUWUIT_DATABASE_PATH
-              value: "/data/db"
-            - name: CONDUWUIT_DATABASE_BACKEND
-              value: "rocksdb"
-            - name: CONDUWUIT_PORT
-              value: "80"
             - name: CONDUWUIT_MAX_REQUEST_SIZE
               value: {{ .Values.config.max_request_size | quote }}
             {{- if .Values.config.allow_registration }}
@@ -81,12 +76,19 @@ spec:
             - name: TUWUNEL_REGISTRATION_TOKEN
               value: {{ .Values.config.registration_token | quote }}
             {{- end }}
+            {{- end }}
             - name: CONDUWUIT_TRUSTED_SERVERS
               value: {{ mustToJson .Values.config.trusted_servers | quote }}
             - name: CONDUWUIT_ADDRESS
               value: "0.0.0.0"
             - name: CONDUWUIT_ROCKSDB_PARALLELISM_THREADS
               value: {{ $threads | quote }}
+            - name: CONDUWUIT_DATABASE_PATH
+              value: "/data/db"
+            - name: CONDUWUIT_DATABASE_BACKEND
+              value: "rocksdb"
+            - name: CONDUWUIT_PORT
+              value: "80"
             - name: RUST_LOG
               value: info
             {{- if .Values.tomlConfig.enabled }}

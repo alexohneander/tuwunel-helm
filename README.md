@@ -46,6 +46,8 @@ Refer to the [values.yaml](values.yaml) file for all available options and their
 
 To enable the optional TOML configuration file, set `tomlConfig.enabled=true`. The chart creates a ConfigMap and mounts it into the pod, then points `TUWUNEL_CONFIG` to the mounted file path.
 
+When TOML config is enabled, all other `config.*` values are ignored and the application will use the TOML file for configuration.
+
 Example:
 
 ```yaml
