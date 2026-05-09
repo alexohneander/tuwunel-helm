@@ -25,7 +25,7 @@ spec:
   podManagementPolicy: Parallel
   selector:
     matchLabels:
-      {{- include "tuwunel.labels" . | nindent 6 }}
+      {{- include "tuwunel.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:

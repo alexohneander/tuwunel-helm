@@ -41,6 +41,11 @@ Generate chart secret name
 {{/*
 Generate all the labels for chart-deployed resources
 */}}
+{{- define "tuwunel.selectorLabels" -}}
+app.kubernetes.io/name: {{ template "tuwunel.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
 {{- define "tuwunel.labels" -}}
 app.kubernetes.io/name: {{ template "tuwunel.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
