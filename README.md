@@ -1,12 +1,10 @@
 # tuwunel
-This is a helm chart for [tuwunel][homepage] forked from [conduwuit][conduwuit] helm chart...DISCONTINUED!
+This is a helm chart for [tuwunel][homepage] forked from [conduwuit][conduwuit] helm chart.
 
-@magikid did fork my repo and made it way better so use his instead:
-https://github.com/magikid/modern-conduwuit-helm
 
 ## TL;DR;
 ```console
-helm repo add tuwunel https://github.com/AreYouLoco/tuwunel-helm/
+helm repo add tuwunel https://github.com/alexohneander/tuwunel-helm
 helm install --set server_name=matrix.example.org tuwunel/tuwunel
 ```
 
@@ -79,13 +77,13 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install --name my-release \
 	--set ingress.enabled=true \
-	AreYouLoco/tuwunel
+	alexohneander/tuwunel
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install --name my-release -f values.yaml AreYouLoco/tuwunel
+helm install --name my-release -f values.yaml alexohneander/tuwunel
 ```
 
 Read through the [values.yaml](values.yaml) file.
