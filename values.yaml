@@ -1,6 +1,6 @@
 image:
   repository: ghcr.io/matrix-construct/tuwunel
-  tag: v1.4.1
+  tag: v1.6.2
   pullPolicy: IfNotPresent
 
 config:
@@ -42,6 +42,28 @@ ingress:
   hosts:
     - tuwunel
   tls: false
+
+gateway:
+  enabled: false
+  create: false
+  name: ""
+  namespace: ""
+  className: ""
+  sectionName: ""
+  annotations: {}
+  labels: {}
+  hostnames:
+    - tuwunel
+  path: /
+  pathType: PathPrefix
+  listener:
+    name: http
+    port: 80
+    protocol: HTTP
+    hostname: ""
+    allowedRoutes:
+      namespaces:
+        from: Same
 
 ## Persist configuration to a persistent volume
 persistence:

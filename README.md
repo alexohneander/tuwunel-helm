@@ -54,6 +54,15 @@ The following tables lists the configurable parameters of the tuwunel chart and 
 | `ingress.path`                     | Ingress path                                                                               | `/`                     |
 | `ingress.hosts`                    | Ingress accepted hostnames                                                                 | `[tuwunel]`           |
 | `ingress.tls`                      | Whether or not to configure TLS for the ingerss                                            | `false`                 |
+| `gateway.enabled`                  | Whether or not to deploy Gateway API resources                                             | `false`                 |
+| `gateway.create`                   | Whether or not to create a Gateway resource in addition to the HTTPRoute                   | `false`                 |
+| `gateway.name`                     | Existing Gateway name, or the name to create when `gateway.create=true`                    | `""`                   |
+| `gateway.namespace`                | Namespace of the referenced or created Gateway                                             | release namespace       |
+| `gateway.className`                | GatewayClass name for created Gateway resources                                            | `""`                   |
+| `gateway.sectionName`              | Optional listener name to target on the parent Gateway                                     | `""`                   |
+| `gateway.hostnames`                | Hostnames accepted by the HTTPRoute                                                        | `[tuwunel]`             |
+| `gateway.path`                     | HTTPRoute path match                                                                       | `/`                     |
+| `gateway.pathType`                 | HTTPRoute path match type                                                                  | `PathPrefix`            |
 | `persistence.data.enabled`         | Use persistent volume to store data                                                        | `true`                  |
 | `persistence.data.size`            | Size of persistent volume claim                                                            | `1Gi`                   |
 | `persistence.data.existingClaim`   | Use an existing PVC to persist data                                                        | ``                      |
@@ -80,6 +89,31 @@ helm install --name my-release -f values.yaml AreYouLoco/tuwunel
 ```
 
 Read through the [values.yaml](values.yaml) file.
+
+## Gateway API
+
+If you already run a shared Gateway in your cluster, enable the HTTPRoute only:
+
+```yaml
+gateway:
+	enabled: true
+	name: shared-gateway
+	namespace: infra
+	sectionName: http
+	hostnames:
+		- matrix.example.org
+```
+
+If this chart should also create the Gateway resource, enable `gateway.create` and set the GatewayClass:
+
+```yaml
+gateway:
+	enabled: true
+	create: true
+	className: cilium
+	hostnames:
+		- matrix.example.org
+```
 
 [docker]: https://ghcr.io/matrix-construct/tuwunel:latest
 [github]: https://github.com/matrix-construct/tuwunel
