@@ -46,6 +46,12 @@ spec:
             - mountPath: /data
               name: data
               subPath: data
+            {{- if .Values.tomlConfig.enabled }}
+            - name: tuwunel-config
+              mountPath: {{ .Values.tomlConfig.mountPath | quote }}
+              subPath: {{ .Values.tomlConfig.configName | quote }}
+              readOnly: true
+            {{- end }}
           securityContext:
             capabilities:
               add:
@@ -83,6 +89,10 @@ spec:
               value: {{ $threads | quote }}
             - name: RUST_LOG
               value: info
+            {{- if .Values.tomlConfig.enabled }}
+            - name: TUWUNEL_CONFIG
+              value: {{ .Values.tomlConfig.mountPath | quote }}
+            {{- end }}
             {{- range .Values.extraEnv }}
             - name: {{ .name | quote }}
               value: {{ .value | quote }}
@@ -109,4 +119,12 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.tomlConfig.enabled }}
+        - name: tuwunel-config
+          configMap:
+            name: {{ include "tuwunel.fullname" . }}-config
+            items:
+              - key: {{ .Values.tomlConfig.configName | quote }}
+                path: {{ .Values.tomlConfig.configName | quote }}
+        {{- end }}
 

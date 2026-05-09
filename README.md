@@ -42,6 +42,23 @@ helm install my-release -f my-values.yaml \
 
 Refer to the [values.yaml](values.yaml) file for all available options and their defaults.
 
+### TOML Config
+
+To enable the optional TOML configuration file, set `tomlConfig.enabled=true`. The chart creates a ConfigMap and mounts it into the pod, then points `TUWUNEL_CONFIG` to the mounted file path.
+
+Example:
+
+```yaml
+tomlConfig:
+  enabled: true
+  mountPath: /etc/tuwunel.toml
+  configName: tuwunel.toml
+  data: |
+    # Your custom TUWUNEL config
+    [server]
+    server_name = "matrix.example.org"
+```
+
 ### Parameters
 
 | Parameter                          | Description                                                                                 | Default                            |
@@ -87,8 +104,10 @@ Refer to the [values.yaml](values.yaml) file for all available options and their
 | `resources.limits`                 | CPU/Memory resource limits                                                                  | `2 CPU / 512 MiB`                  |
 | `nodeSelector`                     | Node labels for pod assignment                                                              | `{}`                               |
 | `tolerations`                      | Tolerations for pod assignment                                                              | `[]`                               |
-| `affinity`                         | Affinity settings for pod assignment                                                        | `{}`                               |
-
+| `affinity`                         | Affinity settings for pod assignment                                                        | `{}`                               || `tomlConfig.enabled`            | Enable TOML ConfigMap mount and set `TUWUNEL_CONFIG`                                        | `false`                            |
+| `tomlConfig.mountPath`          | Target path inside the container for the mounted TOML file                                  | `/etc/tuwunel.toml`                |
+| `tomlConfig.configName`         | ConfigMap key and filename used for the mounted TOML file                                  | `tuwunel.toml`                     |
+| `tomlConfig.data`               | TOML file contents stored in the generated ConfigMap                                       | `""`                             |
 ## Gateway API
 
 Tuwunel supports the [Kubernetes Gateway API][gateway-api] as an alternative to Ingress.
