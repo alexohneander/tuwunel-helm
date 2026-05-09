@@ -22,7 +22,7 @@ spec:
   volumes:
     - name: data
       persistentVolumeClaim:
-        claimName: tuwunel-data
+        claimName: matrix-tuwunel-data
 
 # Hinweis: Passe claimName bei Bedarf an den tatsächlichen PVC-Namen an.
 # Beispiel bei einem Release-Namen wie "tuwunel-test": tuwunel-test-data
