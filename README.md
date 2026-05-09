@@ -1,123 +1,128 @@
-# tuwunel
+# tuwunel Helm Chart
 
-This is a helm chart for [tuwunel][homepage] forked from [conduwuit][conduwuit] helm chart.
+[![Helm Chart](https://img.shields.io/badge/helm-tuwunel-blue)](https://github.com/alexohneander/tuwunel-helm)
+[![App Version](https://img.shields.io/badge/app%20version-v1.6.2-green)](https://github.com/matrix-construct/tuwunel)
 
-## TL;DR;
+A Helm chart for [tuwunel][homepage] — a featureful [Matrix][matrix] homeserver, forked from [conduwuit][conduwuit].
 
-```console
-helm repo add tuwunel https://github.com/alexohneander/tuwunel-helm
-helm install --set server_name=matrix.example.org tuwunel/tuwunel
-```
+## Prerequisites
+
+- Kubernetes 1.21+
+- Helm 3.x
+- A working storage class for persistent volumes (if not using an existing PVC)
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release`:
+Install the chart with the release name `my-release`:
 
 ```console
-helm install --name my-release tuwunel/tuwunel
+helm install my-release \
+  --set config.server_name=matrix.example.org \
+  oci://ghcr.io/alexohneander/tuwunel-helm/tuwunel
 ```
 
-## Uninstalling the Chart
+> **Note:** Set `config.server_name` to your public Matrix domain before installing. This value cannot be changed after the first run without data migration.
 
-To uninstall/delete the `my-release` deployment:
+## Uninstalling the Chart
 
 ```console
 helm delete my-release
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+This removes all Kubernetes components associated with the chart and deletes the release. Persistent volumes are **not** deleted automatically.
 
 ## Configuration
 
-The following tables lists the configurable parameters of the tuwunel chart and their default values.
-
-| Parameter                          | Description                                                                                | Default                 |
-| ---------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------- |
-| `image.repository`                 | Image repository                                                                           | `ghcr.io/matrix-construct/tuwunel` |
-| `image.tag`                        | Image tag. Possible values listed [here][docker].                                          | `v1.4.1`  |
-| `image.pullPolicy`                 | Image pull policy                                                                          | `IfNotPresent`          |
-| `config.server_name`               | Server name                                                                                | `your.server.name`      |
-| `config.max_request_size`          | Maximum upload size                                                                        | `20000000` (20MB)       |
-| `config.allow_registration`        | Whether or not to allow users to register new accounts                                     | `false`                 |
-| `config.registration_token`        | Must be set in order to use registrations                                                  | `supa-dupa-secret-token`             |
-| `config.allow_federation`          | Whether or not to allow federating with other Matrix servers                               | `false`                 |
-| `config.trusted_servers`           | Servers to trust when federating; if enabling federating, `matrix.org` usually makes sense | `[]`                    |
-| `extraLabels`                      | Additional labels to apply to all created resources                                        | `{}`                    |
-| `service.annotations`              | Annotations for Service resource                                                           | `{}`                    |
-| `service.type`                     | Type of service to deploy                                                                  | `ClusterIP`             |
-| `service.clusterIP`                | ClusterIP of service; if blank, it will be selected at random from the cluster CIDR range  | `None`                  |
-| `service.port`                     | Port to expose service                                                                     | `8200`                  |
-| `service.externalIPs`              | External IPs for service                                                                   | `[]`                    |
-| `service.loadBalancerIP`           | Load balancer IP                                                                           | `""`                    |
-| `service.loadBalancerSourceRanges` | List of IP CIDRs allowed to access the load balancer (if supported)                        | `[]`                    |
-| `ingress.enabled`                  | Whether or not to deploy the Ingress resource                                              | `false`                 |
-| `ingress.class`                    | Ingress class (included in annotations)                                                    | ``                      |
-| `ingress.annotations`              | Ingress annotations                                                                        | `{}`                    |
-| `ingress.path`                     | Ingress path                                                                               | `/`                     |
-| `ingress.hosts`                    | Ingress accepted hostnames                                                                 | `[tuwunel]`           |
-| `ingress.tls`                      | Whether or not to configure TLS for the ingerss                                            | `false`                 |
-| `gateway.enabled`                  | Whether or not to deploy Gateway API resources                                             | `false`                 |
-| `gateway.create`                   | Whether or not to create a Gateway resource in addition to the HTTPRoute                   | `false`                 |
-| `gateway.name`                     | Existing Gateway name, or the name to create when `gateway.create=true`                    | `""`                   |
-| `gateway.namespace`                | Namespace of the referenced or created Gateway                                             | release namespace       |
-| `gateway.className`                | GatewayClass name for created Gateway resources                                            | `""`                   |
-| `gateway.sectionName`              | Optional listener name to target on the parent Gateway                                     | `""`                   |
-| `gateway.hostnames`                | Hostnames accepted by the HTTPRoute                                                        | `[tuwunel]`             |
-| `gateway.path`                     | HTTPRoute path match                                                                       | `/`                     |
-| `gateway.pathType`                 | HTTPRoute path match type                                                                  | `PathPrefix`            |
-| `persistence.data.enabled`         | Use persistent volume to store data                                                        | `true`                  |
-| `persistence.data.size`            | Size of persistent volume claim                                                            | `1Gi`                   |
-| `persistence.data.existingClaim`   | Use an existing PVC to persist data                                                        | ``                      |
-| `persistence.data.storageClass`    | Type of persistent volume claim                                                            | ``                      |
-| `persistence.data.accessMode`      | PVC access mode                                                                            | `ReadWriteMany`         |
-| `resources.requests`               | CPU/Memory resource requests                                                               | 1CPU/256MiB             |
-| `resources.limits`                 | CPU/Memory resource limits                                                                 | 2CPU/512MiB             |
-| `nodeSelector`                     | Node labels for pod assignment                                                             | `{}`                    |
-| `tolerations`                      | Toleration labels for pod assignment                                                       | `[]`                    |
-| `affinity`                         | Affinity settings for pod assignment                                                       | `{}`                    |
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+Parameters can be set via `--set key=value` or by providing a custom `values.yaml`:
 
 ```console
-helm install --name my-release \
- --set ingress.enabled=true \
- alexohneander/tuwunel
+helm install my-release -f my-values.yaml \
+  oci://ghcr.io/alexohneander/tuwunel-helm/tuwunel
 ```
 
-Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
+Refer to the [values.yaml](values.yaml) file for all available options and their defaults.
 
-```console
-helm install --name my-release -f values.yaml alexohneander/tuwunel
-```
+### Parameters
 
-Read through the [values.yaml](values.yaml) file.
+| Parameter                          | Description                                                                                 | Default                            |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `image.repository`                 | Image repository                                                                            | `ghcr.io/matrix-construct/tuwunel` |
+| `image.tag`                        | Image tag. Available tags listed [here][docker].                                            | `v1.6.2`                           |
+| `image.pullPolicy`                 | Image pull policy                                                                           | `IfNotPresent`                     |
+| `config.server_name`               | Public Matrix server name (e.g. `matrix.example.org`)                                      | `your.server.name`                 |
+| `config.max_request_size`          | Maximum upload size in bytes                                                                | `20000000` (20 MB)                 |
+| `config.allow_registration`        | Allow users to self-register new accounts                                                   | `false`                            |
+| `config.registration_token`        | Registration token required when registration is enabled                                   | `supa-dupa-secret-token`           |
+| `config.allow_federation`          | Allow federation with other Matrix servers                                                  | `false`                            |
+| `config.trusted_servers`           | Servers to trust when federating; `matrix.org` is a common choice                          | `[]`                               |
+| `extraLabels`                      | Additional labels applied to all created resources                                          | `{}`                               |
+| `service.annotations`              | Annotations for the Service resource                                                        | `{}`                               |
+| `service.type`                     | Service type                                                                                | `ClusterIP`                        |
+| `service.clusterIP`                | Cluster IP; if blank, assigned randomly from the cluster CIDR range                        | `None`                             |
+| `service.port`                     | Port exposed by the service                                                                 | `8200`                             |
+| `service.externalIPs`              | External IPs for the service                                                                | `[]`                               |
+| `service.loadBalancerIP`           | Load balancer IP                                                                            | `""`                               |
+| `service.loadBalancerSourceRanges` | IP CIDRs allowed to access the load balancer (if supported)                                | `[]`                               |
+| `ingress.enabled`                  | Deploy an Ingress resource                                                                  | `false`                            |
+| `ingress.class`                    | Ingress class (included in annotations)                                                     | `""`                               |
+| `ingress.annotations`              | Ingress annotations                                                                         | `{}`                               |
+| `ingress.path`                     | Ingress path                                                                                | `/`                                |
+| `ingress.hosts`                    | Ingress accepted hostnames                                                                  | `[tuwunel]`                        |
+| `ingress.tls`                      | Configure TLS for the Ingress                                                               | `false`                            |
+| `gateway.enabled`                  | Deploy Gateway API resources (HTTPRoute)                                                    | `false`                            |
+| `gateway.create`                   | Also create a Gateway resource (in addition to the HTTPRoute)                               | `false`                            |
+| `gateway.name`                     | Existing Gateway name, or the name to use when `gateway.create=true`                        | `""`                               |
+| `gateway.namespace`                | Namespace of the referenced or created Gateway                                              | release namespace                  |
+| `gateway.className`                | GatewayClass name for created Gateway resources                                             | `""`                               |
+| `gateway.sectionName`              | Optional listener name to target on the parent Gateway                                      | `""`                               |
+| `gateway.hostnames`                | Hostnames accepted by the HTTPRoute                                                         | `[tuwunel]`                        |
+| `gateway.path`                     | HTTPRoute path match                                                                        | `/`                                |
+| `gateway.pathType`                 | HTTPRoute path match type                                                                   | `PathPrefix`                       |
+| `persistence.data.enabled`         | Use a persistent volume to store data                                                       | `true`                             |
+| `persistence.data.size`            | Size of the persistent volume claim                                                         | `1Gi`                              |
+| `persistence.data.existingClaim`   | Use an existing PVC to persist data                                                         | `""`                               |
+| `persistence.data.storageClass`    | Storage class for the persistent volume claim                                               | `""`                               |
+| `persistence.data.accessMode`      | PVC access mode                                                                             | `ReadWriteMany`                    |
+| `resources.requests`               | CPU/Memory resource requests                                                                | `1 CPU / 256 MiB`                  |
+| `resources.limits`                 | CPU/Memory resource limits                                                                  | `2 CPU / 512 MiB`                  |
+| `nodeSelector`                     | Node labels for pod assignment                                                              | `{}`                               |
+| `tolerations`                      | Tolerations for pod assignment                                                              | `[]`                               |
+| `affinity`                         | Affinity settings for pod assignment                                                        | `{}`                               |
 
 ## Gateway API
 
-If you already run a shared Gateway in your cluster, enable the HTTPRoute only:
+Tuwunel supports the [Kubernetes Gateway API][gateway-api] as an alternative to Ingress.
+
+### Use an existing Gateway
+
+If a shared Gateway already exists in your cluster, enable only the HTTPRoute:
 
 ```yaml
 gateway:
- enabled: true
- name: shared-gateway
- namespace: infra
- sectionName: http
- hostnames:
-  - matrix.example.org
+  enabled: true
+  name: shared-gateway
+  namespace: infra
+  sectionName: http
+  hostnames:
+    - matrix.example.org
 ```
 
-If this chart should also create the Gateway resource, enable `gateway.create` and set the GatewayClass:
+### Create a new Gateway
+
+To have this chart also create the Gateway resource, enable `gateway.create` and specify the GatewayClass:
 
 ```yaml
 gateway:
- enabled: true
- create: true
- className: cilium
- hostnames:
-  - matrix.example.org
+  enabled: true
+  create: true
+  className: cilium
+  hostnames:
+    - matrix.example.org
 ```
 
-[docker]: https://ghcr.io/matrix-construct/tuwunel:latest
+[docker]: https://github.com/matrix-construct/tuwunel/pkgs/container/tuwunel
 [github]: https://github.com/matrix-construct/tuwunel
 [homepage]: https://tuwunel.chat/
+[matrix]: https://matrix.org/
 [conduwuit]: https://gitlab.cronce.io/charts/conduwuit
+[gateway-api]: https://gateway-api.sigs.k8s.io/
