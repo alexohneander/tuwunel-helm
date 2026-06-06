@@ -1,7 +1,7 @@
 # tuwunel Helm Chart
 
 [![Helm Chart](https://img.shields.io/badge/helm-tuwunel-blue)](https://github.com/alexohneander/tuwunel-helm)
-[![App Version](https://img.shields.io/badge/app%20version-v1.6.2-green)](https://github.com/matrix-construct/tuwunel)
+[![App Version](https://img.shields.io/badge/app%20version-v1.7.1-green)](https://github.com/matrix-construct/tuwunel)
 
 A Helm chart for [tuwunel][homepage] — a featureful [Matrix][matrix] homeserver, forked from [conduwuit][conduwuit].
 
