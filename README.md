@@ -1,7 +1,7 @@
 # tuwunel Helm Chart
 
 [![Helm Chart](https://img.shields.io/badge/helm-tuwunel-blue)](https://github.com/alexohneander/tuwunel-helm)
-[![App Version](https://img.shields.io/badge/app%20version-v1.7.1-green)](https://github.com/matrix-construct/tuwunel)
+[![App Version](https://img.shields.io/badge/app%20version-v1.8.0-green)](https://github.com/matrix-construct/tuwunel)
 
 A Helm chart for [tuwunel][homepage] — a featureful [Matrix][matrix] homeserver, forked from [conduwuit][conduwuit].
 
@@ -66,7 +66,7 @@ tomlConfig:
 | Parameter                          | Description                                                                                 | Default                            |
 | ---------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `image.repository`                 | Image repository                                                                            | `ghcr.io/matrix-construct/tuwunel` |
-| `image.tag`                        | Image tag. Available tags listed [here][docker].                                            | `v1.6.2`                           |
+| `image.tag`                        | Image tag. Available tags listed [here][docker].                                            | `v1.8.0`                           |
 | `image.pullPolicy`                 | Image pull policy                                                                           | `IfNotPresent`                     |
 | `config.server_name`               | Public Matrix server name (e.g. `matrix.example.org`)                                      | `your.server.name`                 |
 | `config.max_request_size`          | Maximum upload size in bytes                                                                | `20000000` (20 MB)                 |
@@ -78,7 +78,7 @@ tomlConfig:
 | `service.annotations`              | Annotations for the Service resource                                                        | `{}`                               |
 | `service.type`                     | Service type                                                                                | `ClusterIP`                        |
 | `service.clusterIP`                | Cluster IP; if blank, assigned randomly from the cluster CIDR range                        | `None`                             |
-| `service.port`                     | Port exposed by the service                                                                 | `8200`                             |
+| `service.port`                     | Port exposed by the service                                                                 | `80`                               |
 | `service.externalIPs`              | External IPs for the service                                                                | `[]`                               |
 | `service.loadBalancerIP`           | Load balancer IP                                                                            | `""`                               |
 | `service.loadBalancerSourceRanges` | IP CIDRs allowed to access the load balancer (if supported)                                | `[]`                               |
@@ -98,18 +98,20 @@ tomlConfig:
 | `gateway.path`                     | HTTPRoute path match                                                                        | `/`                                |
 | `gateway.pathType`                 | HTTPRoute path match type                                                                   | `PathPrefix`                       |
 | `persistence.data.enabled`         | Use a persistent volume to store data                                                       | `true`                             |
-| `persistence.data.size`            | Size of the persistent volume claim                                                         | `1Gi`                              |
+| `persistence.data.size`            | Size of the persistent volume claim                                                         | `16Gi`                             |
 | `persistence.data.existingClaim`   | Use an existing PVC to persist data                                                         | `""`                               |
 | `persistence.data.storageClass`    | Storage class for the persistent volume claim                                               | `""`                               |
-| `persistence.data.accessMode`      | PVC access mode                                                                             | `ReadWriteMany`                    |
+| `persistence.data.accessMode`      | PVC access mode                                                                             | `ReadWriteOnce`                    |
 | `resources.requests`               | CPU/Memory resource requests                                                                | `1 CPU / 256 MiB`                  |
 | `resources.limits`                 | CPU/Memory resource limits                                                                  | `2 CPU / 512 MiB`                  |
 | `nodeSelector`                     | Node labels for pod assignment                                                              | `{}`                               |
 | `tolerations`                      | Tolerations for pod assignment                                                              | `[]`                               |
-| `affinity`                         | Affinity settings for pod assignment                                                        | `{}`                               || `tomlConfig.enabled`            | Enable TOML ConfigMap mount and set `TUWUNEL_CONFIG`                                        | `false`                            |
-| `tomlConfig.mountPath`          | Target path inside the container for the mounted TOML file                                  | `/etc/tuwunel.toml`                |
-| `tomlConfig.configName`         | ConfigMap key and filename used for the mounted TOML file                                  | `tuwunel.toml`                     |
-| `tomlConfig.data`               | TOML file contents stored in the generated ConfigMap                                       | `""`                             |
+| `affinity`                         | Affinity settings for pod assignment                                                        | `{}`                               |
+| `tomlConfig.enabled`               | Enable optional TOML configuration file                                                     | `false`                            |
+| `tomlConfig.mountPath`             | Target path inside the container for the mounted TOML file                                  | `/etc/tuwunel.toml`                |
+| `tomlConfig.configName`            | ConfigMap key and filename used for the mounted TOML file                                  | `tuwunel.toml`                     |
+| `tomlConfig.data`                  | TOML file contents stored in the generated ConfigMap                                       | `""`                               |
+
 ## Gateway API
 
 Tuwunel supports the [Kubernetes Gateway API][gateway-api] as an alternative to Ingress.
