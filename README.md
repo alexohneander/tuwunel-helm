@@ -1,7 +1,7 @@
 # tuwunel Helm Chart
 
 [![Helm Chart](https://img.shields.io/badge/helm-tuwunel-blue)](https://github.com/alexohneander/tuwunel-helm)
-[![App Version](https://img.shields.io/badge/app%20version-v1.8.0-green)](https://github.com/matrix-construct/tuwunel)
+[![App Version](https://img.shields.io/badge/app%20version-v1.8.1-green)](https://github.com/matrix-construct/tuwunel)
 
 A Helm chart for [tuwunel][homepage] — a featureful [Matrix][matrix] homeserver, forked from [conduwuit][conduwuit].
 
@@ -66,7 +66,7 @@ tomlConfig:
 | Parameter                          | Description                                                                                 | Default                            |
 | ---------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `image.repository`                 | Image repository                                                                            | `ghcr.io/matrix-construct/tuwunel` |
-| `image.tag`                        | Image tag. Available tags listed [here][docker].                                            | `v1.8.0`                           |
+| `image.tag`                        | Image tag. Available tags listed [here][docker].                                            | `v1.8.1`                           |
 | `image.pullPolicy`                 | Image pull policy                                                                           | `IfNotPresent`                     |
 | `config.server_name`               | Public Matrix server name (e.g. `matrix.example.org`)                                      | `your.server.name`                 |
 | `config.max_request_size`          | Maximum upload size in bytes                                                                | `20000000` (20 MB)                 |
@@ -144,7 +144,6 @@ gateway:
 ```
 
 [docker]: https://github.com/matrix-construct/tuwunel/pkgs/container/tuwunel
-[github]: https://github.com/matrix-construct/tuwunel
 [homepage]: https://tuwunel.chat/
 [matrix]: https://matrix.org/
 [conduwuit]: https://gitlab.cronce.io/charts/conduwuit
